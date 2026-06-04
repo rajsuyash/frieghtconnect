@@ -96,6 +96,19 @@ importers:
       vitest:
         specifier: ^4.1.8
         version: 4.1.8(@types/node@22.19.19)(vite@8.0.16(@types/node@22.19.19)(esbuild@0.28.0)(jiti@2.7.0)(tsx@4.22.4))
+    optionalDependencies:
+      '@tailwindcss/oxide-linux-x64-gnu':
+        specifier: 4.3.0
+        version: 4.3.0
+      '@tailwindcss/oxide-linux-x64-musl':
+        specifier: 4.3.0
+        version: 4.3.0
+      lightningcss-linux-x64-gnu:
+        specifier: 1.32.0
+        version: 1.32.0
+      lightningcss-linux-x64-musl:
+        specifier: 1.32.0
+        version: 1.32.0
 
 packages:
 
