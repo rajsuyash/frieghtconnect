@@ -1,0 +1,47 @@
+# .claudeignore — files to keep out of Claude's context window
+# Syntax is like .gitignore. This reduces noise and speeds up sessions.
+#
+# Note: this DOES NOT block reads. For secrets, use permissions.deny in .claude/settings.json.
+
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build output
+.next/
+out/
+dist/
+build/
+
+# Prisma generated client
+node_modules/.prisma/
+prisma/generated/
+
+# Lockfiles — Claude rarely needs to read these
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Logs and caches
+*.log
+.cache/
+.turbo/
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# Local config + secrets
+.env.local
+.env.*.local
+.DS_Store
+
+# Verifier artifacts
+.claude/screenshots/
+.claude/dev-server.log
+
+# Large assets
+*.mp4
+*.mov
+*.zip
+*.pdf

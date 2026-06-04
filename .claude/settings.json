@@ -1,0 +1,74 @@
+{
+  "_comment": "FreightConnect — Next.js 15 + pnpm + Prisma, web surface only. Hooks: typecheck-on-edit + mark-verified (PostToolUse), smoke-check + tests + stop-verify (Stop), danger-block + pre-commit-gate (PreToolUse:Bash). NOTE: no permissions.allow rules are set here — run /fewer-permission-prompts (or add them yourself) to reduce approval prompts for pnpm/git/node/etc.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "pnpm typecheck 2>&1 | tail -30 || true",
+            "description": "Type-check after file edits and surface errors back to Claude."
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/mark-verified.sh",
+            "description": "Record that a verification command ran (touches .claude/state/last-verified)."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/smoke-check.sh 2>&1 || true",
+            "description": "Smoke-check: dev server health + dev-server.log error scan + evidence reminder."
+          },
+          {
+            "type": "command",
+            "command": "pnpm test 2>&1 | tail -50 || true",
+            "description": "Run tests when Claude finishes a response — surface failures before handoff."
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/stop-verify.sh",
+            "description": "Soft-warn when source was edited but verification hasn't run since."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"$TOOL_INPUT\" | grep -qE 'rm -rf|drop table|truncate|force.?push|>\\s*/dev/sd' && { echo 'BLOCKED: dangerous command'; exit 2; } || exit 0",
+            "description": "Block obviously destructive commands."
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/pre-commit-gate.sh",
+            "description": "Hard-block git commit when staged source was edited after the last verification run."
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "deny": [
+      "Read(.env*)",
+      "Read(**/secrets/**)",
+      "Read(**/*.key)",
+      "Read(**/*.pem)"
+    ]
+  }
+}

@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+/*
+  FreightConnect design tokens (Tailwind v4, CSS-first).
+  Locked accent: ocean blue. Emerald appears ONLY for the verified semantic state.
+  Radius rule: buttons = full pill, cards/surfaces = 1rem (rounded-2xl), inputs = 0.75rem.
+*/
+@theme {
+  /* Brand + neutrals */
+  --color-navy: #0f172a;
+  --color-navy-700: #1e293b;
+  --color-ink: #020617;
+  --color-canvas: #f8fafc;
+  --color-surface: #ffffff;
+  --color-muted: #475569;
+  --color-faint: #64748b;
+  --color-line: #e2e8f0;
+
+  /* The single locked accent (ocean blue) */
+  --color-accent: #0369a1;
+  --color-accent-strong: #075985;
+  --color-accent-soft: #e0f2fe;
+
+  /* Semantic-only success (verified state) */
+  --color-verified: #059669;
+  --color-verified-soft: #d1fae5;
+
+  /* Type */
+  --font-heading: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+
+  /* Easing used across Motion + CSS */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-muted);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    color: var(--color-ink);
+    letter-spacing: -0.02em;
+  }
+  ::selection {
+    background: var(--color-accent);
+    color: #fff;
+  }
+}
+
+/* Frosted glass — inner border + inset highlight for a real refracted edge.
+   Falls back to a solid fill when the user reduces transparency. */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 20px 50px -20px rgba(15, 23, 42, 0.18);
+}
+.glass-dark {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(18px) saturate(150%);
+  -webkit-backdrop-filter: blur(18px) saturate(150%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    0 24px 60px -24px rgba(2, 6, 23, 0.5);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .glass {
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .glass-dark {
+    background: rgba(15, 23, 42, 0.96);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Animated aurora glow. Pauses under reduced motion. */
+@keyframes drift {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(3%, -4%, 0) scale(1.08); }
+}
+.aurora {
+  animation: drift 18s var(--ease-out-expo) infinite;
+}
+
+/* Dot traveling along a freight-route arc (offset-path set inline per dot). */
+@keyframes route-travel {
+  0% { offset-distance: 0%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { offset-distance: 100%; opacity: 0; }
+}
+.route-dot {
+  animation: route-travel 4.5s linear infinite;
+}
+
+/* Port pin pulse */
+@keyframes pin-pulse {
+  0% { transform: scale(0.6); opacity: 0.7; }
+  70% { transform: scale(2.4); opacity: 0; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+.pin-pulse {
+  animation: pin-pulse 2.8s var(--ease-out-expo) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aurora,
+  .route-dot,
+  .pin-pulse { animation: none; }
+  html { scroll-behavior: auto; }
+}

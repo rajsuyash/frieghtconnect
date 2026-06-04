@@ -1,0 +1,12 @@
+{
+  "_comment": "Auto-registers Playwright MCP so Claude Code can drive a browser, read console errors, capture screenshots, and verify UI changes without copy-pasting screenshots. Run 'npx @playwright/mcp install' once after cloning. Headless by default — flip to --headed for visual debugging.",
+  "mcpServers": {
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest", "--headless", "--browser=chromium"],
+      "env": {
+        "DEV_URL": "http://localhost:3000"
+      }
+    }
+  }
+}

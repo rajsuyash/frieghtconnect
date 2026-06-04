@@ -1,0 +1,187 @@
+// FreightConnect data model — see docs/PRD.md §5 and docs/architecture.md §3.
+// Invariants: profiles are public only when status=approved; verified ⇒ approved;
+// KYC docs never on public endpoints; slug unique+immutable once approved.
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  shipper
+  forwarder
+  admin
+}
+
+enum ForwarderStatus {
+  draft
+  pending
+  approved
+  rejected
+  suspended
+}
+
+enum InquiryStatus {
+  sent
+  queued
+  failed
+}
+
+enum KycType {
+  business_registration
+  trade_license
+  certificate
+  other
+}
+
+model User {
+  id            String           @id @default(cuid())
+  email         String           @unique
+  passwordHash  String
+  role          Role             @default(shipper)
+  emailVerified Boolean          @default(false)
+  createdAt     DateTime         @default(now())
+
+  forwarder     ForwarderProfile?
+  reviewed      ForwarderProfile[] @relation("ReviewedBy")
+  auditLogs     AuditLog[]
+}
+
+model ForwarderProfile {
+  id              String          @id @default(cuid())
+  ownerUserId     String          @unique
+  owner           User            @relation(fields: [ownerUserId], references: [id], onDelete: Cascade)
+
+  slug            String          @unique
+  companyName     String
+  primaryCountry  String
+  yearEstablished Int?
+  websiteUrl      String?
+  about           String?
+  logoUrl         String?
+
+  status          ForwarderStatus @default(draft)
+  verified        Boolean         @default(false)
+
+  modes           String[]        // Mode codes (taxonomy)
+  services        String[]        // Service codes (taxonomy)
+
+  reviewedById    String?
+  reviewedBy      User?           @relation("ReviewedBy", fields: [reviewedById], references: [id])
+  reviewedAt      DateTime?
+  rejectionReason String?
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  countries       CountryCoverage[]
+  lanes           TradeLane[]
+  documents       KycDocument[]
+  inquiries       Inquiry[]
+
+  @@index([status])
+  @@index([primaryCountry])
+  @@index([modes], type: Gin)
+  @@index([services], type: Gin)
+}
+
+model CountryCoverage {
+  id            String           @id @default(cuid())
+  forwarderId   String
+  forwarder     ForwarderProfile @relation(fields: [forwarderId], references: [id], onDelete: Cascade)
+  country       String
+  city          String?
+  isHeadquarters Boolean         @default(false)
+  ports         String[]
+
+  @@index([forwarderId])
+  @@index([country])
+}
+
+model TradeLane {
+  id                 String           @id @default(cuid())
+  forwarderId        String
+  forwarder          ForwarderProfile @relation(fields: [forwarderId], references: [id], onDelete: Cascade)
+  originCountry      String
+  destinationCountry String
+
+  @@index([forwarderId])
+  @@index([originCountry, destinationCountry])
+}
+
+model KycDocument {
+  id          String           @id @default(cuid())
+  forwarderId String
+  forwarder   ForwarderProfile @relation(fields: [forwarderId], references: [id], onDelete: Cascade)
+  type        KycType
+  storageKey  String           // key in the private bucket — never exposed publicly
+  mimeType    String
+  sizeBytes   Int
+  uploadedAt  DateTime         @default(now())
+
+  @@index([forwarderId])
+}
+
+model Inquiry {
+  id                 String        @id @default(cuid())
+  forwarderId        String
+  forwarder          ForwarderProfile @relation(fields: [forwarderId], references: [id], onDelete: Cascade)
+
+  shipperName        String
+  shipperEmail       String
+  shipperCompany     String?
+
+  originCountry      String?
+  originPort         String?
+  destinationCountry String?
+  destinationPort    String?
+  mode               String?
+  cargoType          String?
+  message            String
+
+  status             InquiryStatus @default(queued)
+  idempotencyKey     String?       @unique
+  createdAt          DateTime      @default(now())
+
+  @@index([forwarderId])
+  @@index([shipperEmail, createdAt])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String
+  actor      User     @relation(fields: [actorId], references: [id])
+  action     String   // e.g. "forwarder.approve"
+  targetType String
+  targetId   String
+  meta       Json?
+  createdAt  DateTime @default(now())
+
+  @@index([targetType, targetId])
+}
+
+// Reference / lookup taxonomy
+model Country {
+  code  String @id // ISO 3166-1 alpha-2
+  label String
+}
+
+model Port {
+  code        String @id // UN/LOCODE
+  label       String
+  countryCode String
+}
+
+model Mode {
+  code  String @id
+  label String
+}
+
+model Service {
+  code  String @id
+  label String
+}
