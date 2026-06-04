@@ -15,6 +15,9 @@ function fmtKb(bytes: number): string {
   return `${Math.max(1, Math.round(bytes / 1024))} KB`;
 }
 
+// Per-request data (DB + session) — never prerender at build.
+export const dynamic = "force-dynamic";
+
 export default async function ApplicationPage({
   params,
 }: {

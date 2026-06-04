@@ -22,6 +22,9 @@ function pageHref(sp: SP, page: number): string {
   return `/forwarders?${params.toString()}`;
 }
 
+// Per-request data (DB + session) — never prerender at build.
+export const dynamic = "force-dynamic";
+
 export default async function DirectoryPage({
   searchParams,
 }: {

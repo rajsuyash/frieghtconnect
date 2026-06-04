@@ -19,6 +19,9 @@ function laneLabel(o?: string | null, op?: string | null, d?: string | null, dp?
   return { left, right };
 }
 
+// Per-request data (DB + session) — never prerender at build.
+export const dynamic = "force-dynamic";
+
 export default async function InquiriesPage() {
   const user = await getCurrentUser();
   const inquiries = user?.role === "forwarder" ? await getMyInquiries(user.id) : [];

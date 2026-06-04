@@ -7,6 +7,9 @@ import { countryLabel } from "@/lib/geo";
 
 export const metadata = { title: "Review queue — FreightConnect Admin" };
 
+// Per-request data (DB + session) — never prerender at build.
+export const dynamic = "force-dynamic";
+
 export default async function ReviewQueuePage() {
   const pending = await listPending();
 

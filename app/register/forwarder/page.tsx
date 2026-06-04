@@ -6,6 +6,9 @@ import { OnboardingWizard } from "@/components/forwarders/onboarding-wizard";
 
 export const metadata = { title: "List your company — FreightConnect" };
 
+// Per-request data (DB + session) — never prerender at build.
+export const dynamic = "force-dynamic";
+
 export default async function ForwarderOnboardingPage() {
   const user = await requireUser("/register/forwarder");
 

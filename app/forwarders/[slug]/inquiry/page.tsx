@@ -17,6 +17,9 @@ export async function generateMetadata({
   return { title: f ? `Send an inquiry to ${f.companyName}` : "Inquiry — FreightConnect" };
 }
 
+// Per-request data (DB + session) — never prerender at build.
+export const dynamic = "force-dynamic";
+
 export default async function InquiryPage({
   params,
 }: {

@@ -22,6 +22,9 @@ const STATUS_LABEL: Record<string, string> = {
   suspended: "Suspended",
 };
 
+// Per-request data (DB + session) — never prerender at build.
+export const dynamic = "force-dynamic";
+
 export default async function DashboardPage() {
   const user = await getCurrentUser();
 
