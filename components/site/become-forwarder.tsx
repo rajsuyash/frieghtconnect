@@ -48,7 +48,7 @@ export function BecomeForwarder() {
             <div className="mt-9 flex flex-wrap items-center gap-4">
               <Magnetic>
                 <Link
-                  href="/register?role=forwarder"
+                  href="/register/forwarder"
                   className={buttonVariants({ size: "lg" })}
                 >
                   List your company

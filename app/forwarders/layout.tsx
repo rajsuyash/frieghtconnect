@@ -26,7 +26,7 @@ export default function ForwardersLayout({
             >
               For forwarders
             </Link>
-            <Link href="/register?role=forwarder">
+            <Link href="/register/forwarder">
               <Button size="sm">List your company</Button>
             </Link>
           </nav>

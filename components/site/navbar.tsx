@@ -4,11 +4,12 @@ import * as React from "react";
 import Link from "next/link";
 import { motion, useScroll, useMotionValueEvent } from "motion/react";
 import { Boat, List, X } from "@phosphor-icons/react";
+import { Show, SignInButton, UserButton } from "@clerk/nextjs";
 import { buttonVariants } from "@/components/ui/button";
 import { Magnetic } from "@/components/motion/magnetic";
 import { cn } from "@/lib/utils";
 
-const LIST_HREF = "/register?role=forwarder";
+const LIST_HREF = "/register/forwarder";
 
 const NAV_LINKS = [
   { label: "How it works", href: "#how-it-works" },
@@ -58,12 +59,25 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <Link
-            href="/login"
-            className="hidden text-sm font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-ink)] sm:block cursor-pointer"
-          >
-            Sign in
-          </Link>
+          <Show when="signed-out">
+            <SignInButton mode="modal">
+              <button
+                type="button"
+                className="hidden text-sm font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-ink)] sm:block cursor-pointer"
+              >
+                Sign in
+              </button>
+            </SignInButton>
+          </Show>
+          <Show when="signed-in">
+            <Link
+              href="/dashboard"
+              className="hidden text-sm font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-ink)] sm:block cursor-pointer"
+            >
+              Dashboard
+            </Link>
+            <UserButton />
+          </Show>
           <div className="hidden sm:block">
             <Magnetic>
               <Link href={LIST_HREF} className={buttonVariants({ size: "sm" })}>

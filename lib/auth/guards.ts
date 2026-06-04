@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import type { Role } from "@prisma/client";
-import { auth } from "@/auth";
+import { syncCurrentUser } from "@/lib/auth/sync";
 
 export interface SessionUser {
   id: string;
@@ -9,23 +9,16 @@ export interface SessionUser {
   isVerified: boolean;
 }
 
-/** Current user or null — safe in both Route Handlers and Server Components. */
+/** Current DB user (synced from Clerk) or null — safe in Route Handlers + Server Components. */
 export async function getCurrentUser(): Promise<SessionUser | null> {
-  const session = await auth();
-  if (!session?.user?.id) return null;
-  return {
-    id: session.user.id,
-    email: session.user.email,
-    role: session.user.role,
-    isVerified: session.user.isVerified,
-  };
+  return syncCurrentUser();
 }
 
-/** Page-level guard: redirect to /login if signed out. */
+/** Page-level guard: redirect to Clerk sign-in if signed out. */
 export async function requireUser(next?: string): Promise<SessionUser> {
   const user = await getCurrentUser();
   if (!user) {
-    redirect(`/login${next ? `?next=${encodeURIComponent(next)}` : ""}`);
+    redirect(`/sign-in${next ? `?redirect_url=${encodeURIComponent(next)}` : ""}`);
   }
   return user;
 }

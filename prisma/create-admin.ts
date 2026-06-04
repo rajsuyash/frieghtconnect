@@ -1,21 +1,20 @@
 import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
-import { hashPassword } from "../lib/auth/password";
 
-// Admin accounts are provisioned manually (no public signup).
-// Usage: ADMIN_EMAIL=you@x.com ADMIN_PASSWORD=secret pnpm create:admin
+// Mark an email as admin. Auth itself is handled by Clerk — when this person
+// signs in via Clerk with this email, syncCurrentUser() links their clerkId
+// to this row and they get the admin role.
+// Usage: ADMIN_EMAIL=you@x.com pnpm create:admin
 const prisma = new PrismaClient();
 
 async function main() {
   const email = process.env.ADMIN_EMAIL || "admin@freightconnect.local";
-  const password = process.env.ADMIN_PASSWORD || "admin12345";
-  const passwordHash = await hashPassword(password);
   await prisma.user.upsert({
     where: { email },
-    update: { role: "admin", emailVerified: true, passwordHash },
-    create: { email, passwordHash, role: "admin", emailVerified: true },
+    update: { role: "admin", emailVerified: true },
+    create: { email, role: "admin", emailVerified: true },
   });
-  console.info(`Admin ready: ${email}`);
+  console.info(`Admin marked: ${email}. Sign in via Clerk with this email to activate.`);
 }
 
 main()

@@ -14,10 +14,10 @@ const COLUMNS = [
   {
     heading: "For forwarders",
     links: [
-      { label: "List your company", href: "/register?role=forwarder" },
+      { label: "List your company", href: "/register/forwarder" },
       { label: "Verification", href: "/#how-it-works" },
       { label: "Forwarder dashboard", href: "/dashboard" },
-      { label: "Pricing", href: "/register?role=forwarder" },
+      { label: "Pricing", href: "/register/forwarder" },
     ],
   },
   {

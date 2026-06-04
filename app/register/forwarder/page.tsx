@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Boat } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "@/components/ui/button";
 import { requireUser } from "@/lib/auth/guards";
+import { promoteToForwarder } from "@/lib/auth/sync";
 import { OnboardingWizard } from "@/components/forwarders/onboarding-wizard";
 
 export const metadata = { title: "List your company — Global Trade Collective" };
@@ -11,6 +12,8 @@ export const dynamic = "force-dynamic";
 
 export default async function ForwarderOnboardingPage() {
   const user = await requireUser("/register/forwarder");
+  // Reaching this page is the intent to list a company — promote shippers.
+  if (user.role === "shipper") await promoteToForwarder(user.id);
 
   return (
     <div className="min-h-[100dvh] bg-[var(--color-canvas)]">
@@ -45,21 +48,21 @@ export default async function ForwarderOnboardingPage() {
         </div>
 
         <div className="mt-8">
-          {user.role === "forwarder" ? (
-            <OnboardingWizard isVerified={user.isVerified} />
-          ) : (
+          {user.role === "admin" ? (
             <div className="rounded-3xl border border-[var(--color-line)] bg-white p-10 text-center">
               <h2 className="text-xl font-semibold text-[var(--color-ink)]">
-                You&apos;re signed in as a shipper
+                You&apos;re signed in as an admin
               </h2>
               <p className="mx-auto mt-2 max-w-md text-[var(--color-muted)]">
-                Listing a company requires a forwarder account. Create one to build
-                a verified profile and receive inquiries.
+                Admin accounts review applications. Use a separate account to list a
+                company.
               </p>
-              <Link href="/register?role=forwarder" className="mt-6 inline-block">
-                <Button>Create a forwarder account</Button>
+              <Link href="/admin/review" className="mt-6 inline-block">
+                <Button>Go to review queue</Button>
               </Link>
             </div>
+          ) : (
+            <OnboardingWizard isVerified={user.isVerified} />
           )}
         </div>
       </main>

@@ -59,8 +59,6 @@ const FORWARDERS: SeedForwarder[] = [
   { company: "Loire Valley Forwarding", country: "FR", city: "Le Havre", port: "NLRTM", modes: ["sea_lcl", "road", "rail"], services: ["consolidation", "customs_clearance"], year: 2014, lanes: [["FR", "US"], ["FR", "CN"]] },
 ];
 
-const SEED_PASSWORD_HASH = "seed-account-no-login";
-
 async function main() {
   // Taxonomy
   for (const [code, label] of COUNTRIES) {
@@ -84,7 +82,7 @@ async function main() {
     const owner = await prisma.user.upsert({
       where: { email },
       update: {},
-      create: { email, passwordHash: SEED_PASSWORD_HASH, role: "forwarder", emailVerified: true },
+      create: { email, role: "forwarder", emailVerified: true },
     });
 
     await prisma.forwarderProfile.upsert({

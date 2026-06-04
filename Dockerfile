@@ -18,6 +18,10 @@ RUN pnpm install --no-frozen-lockfile
 
 # Build the app.
 COPY . .
+# Clerk's publishable key is inlined into the client bundle at `next build`,
+# so it must be present as a build-time env (Railway passes it via build arg).
+ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
 RUN pnpm build
 
 ENV NODE_ENV=production

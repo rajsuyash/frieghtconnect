@@ -1,3 +1,4 @@
+import {ClerkProvider} from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
@@ -33,7 +34,20 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${outfit.variable} ${jakarta.variable}`}>
-      <body className="min-h-[100dvh] antialiased">{children}</body>
+      <body className="min-h-[100dvh] antialiased">
+        <ClerkProvider
+          appearance={{
+            variables: {
+              colorPrimary: "#0369a1",
+              colorText: "#0F172A",
+              borderRadius: "0.75rem",
+              fontFamily: "var(--font-jakarta), system-ui, sans-serif",
+            },
+          }}
+        >
+          {children}
+        </ClerkProvider>
+      </body>
     </html>
   );
 }
