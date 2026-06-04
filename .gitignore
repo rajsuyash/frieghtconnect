@@ -39,3 +39,6 @@ next-env.d.ts
 /playwright-report
 /test-results
 .gstack/
+
+# local KYC uploads (dev)
+.uploads/
