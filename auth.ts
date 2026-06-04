@@ -5,6 +5,9 @@ import { verifyCredentials } from "@/lib/auth/credentials";
 import { loginSchema } from "@/lib/validation/auth";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  // Required behind a reverse proxy (Railway) — Auth.js v5 otherwise rejects the
+  // request host and returns a "server configuration" error on sign-in.
+  trustHost: true,
   session: { strategy: "jwt" },
   pages: { signIn: "/login" },
   providers: [
