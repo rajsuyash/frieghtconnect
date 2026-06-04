@@ -18,6 +18,7 @@ function RegisterForm() {
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
   const [done, setDone] = React.useState(false);
+  const [verified, setVerified] = React.useState(false);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -30,6 +31,8 @@ function RegisterForm() {
         body: JSON.stringify({ email, password, role }),
       });
       if (res.status === 201) {
+        const data = await res.json().catch(() => null);
+        setVerified(Boolean(data?.verified));
         setDone(true);
       } else if (res.status === 409) {
         setError("An account with this email already exists.");
@@ -51,14 +54,23 @@ function RegisterForm() {
           <CheckCircle size={30} weight="fill" />
         </span>
         <h1 className="mt-5 text-xl font-semibold text-[var(--color-ink)]">
-          Check your email
+          {verified ? "Account created" : "Check your email"}
         </h1>
         <p className="mt-2 text-sm text-[var(--color-muted)]">
-          We sent a verification link to <strong>{email}</strong>. Confirm it to
-          activate your account.
+          {verified ? (
+            <>
+              Your account for <strong>{email}</strong> is ready. Sign in to
+              continue.
+            </>
+          ) : (
+            <>
+              We sent a verification link to <strong>{email}</strong>. Confirm it
+              to activate your account.
+            </>
+          )}
         </p>
         <Link href="/login" className="mt-6 inline-block">
-          <Button variant="secondary">Back to sign in</Button>
+          <Button>{verified ? "Sign in" : "Back to sign in"}</Button>
         </Link>
       </div>
     );

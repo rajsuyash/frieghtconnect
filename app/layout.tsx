@@ -17,11 +17,11 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "FreightConnect — Find verified freight forwarders, anywhere",
+  title: "Global Trade Collective — Find verified freight forwarders, anywhere",
   description:
     "Search verified freight-forwarding agents by country, trade lane, and service. Send a structured inquiry in minutes. No membership fees.",
   openGraph: {
-    title: "FreightConnect — Find verified freight forwarders, anywhere",
+    title: "Global Trade Collective — Find verified freight forwarders, anywhere",
     description:
       "Search verified freight-forwarding agents by country, trade lane, and service.",
     type: "website",

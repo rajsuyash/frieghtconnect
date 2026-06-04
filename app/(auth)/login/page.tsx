@@ -65,7 +65,7 @@ function LoginForm() {
       </Button>
 
       <p className="text-center text-sm text-[var(--color-muted)]">
-        New to FreightConnect?{" "}
+        New to Global Trade Collective?{" "}
         <Link href="/register" className="font-medium text-[var(--color-accent)] hover:underline">
           Create an account
         </Link>

@@ -16,7 +16,7 @@ export default function ForwardersLayout({
               <Boat size={20} weight="fill" />
             </span>
             <span className="font-[family-name:var(--font-heading)] text-lg font-semibold tracking-tight text-[var(--color-ink)]">
-              FreightConnect
+              Global Trade Collective
             </span>
           </Link>
           <nav className="flex items-center gap-2">
@@ -26,7 +26,7 @@ export default function ForwardersLayout({
             >
               For forwarders
             </Link>
-            <Link href="/register/forwarder">
+            <Link href="/register?role=forwarder">
               <Button size="sm">List your company</Button>
             </Link>
           </nav>

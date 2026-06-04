@@ -23,7 +23,7 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
   const f = await getForwarderBySlug(slug);
-  if (!f) return { title: "Forwarder not found — FreightConnect" };
+  if (!f) return { title: "Forwarder not found — Global Trade Collective" };
   return {
     title: `${f.companyName} — verified freight forwarder`,
     description: `${f.companyName}, a verified forwarder based in ${countryLabel(f.primaryCountry)}. View coverage, modes, and send an inquiry.`,

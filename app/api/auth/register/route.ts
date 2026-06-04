@@ -15,8 +15,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { id } = await registerUser(parsed.data);
-    return NextResponse.json({ id, status: "created" }, { status: 201 });
+    const { id, verified } = await registerUser(parsed.data);
+    return NextResponse.json({ id, status: "created", verified }, { status: 201 });
   } catch (err) {
     if (err instanceof EmailTakenError) {
       return NextResponse.json({ error: "EMAIL_TAKEN" }, { status: 409 });

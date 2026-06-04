@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { Check, Quotes } from "@phosphor-icons/react";
 import { motion, useReducedMotion } from "motion/react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Magnetic } from "@/components/motion/magnetic";
 import { Monogram } from "@/components/brand/monogram";
 
@@ -46,7 +47,12 @@ export function BecomeForwarder() {
 
             <div className="mt-9 flex flex-wrap items-center gap-4">
               <Magnetic>
-                <Button size="lg">List your company</Button>
+                <Link
+                  href="/register?role=forwarder"
+                  className={buttonVariants({ size: "lg" })}
+                >
+                  List your company
+                </Link>
               </Magnetic>
               <a
                 href="#how-it-works"

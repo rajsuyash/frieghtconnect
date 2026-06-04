@@ -19,7 +19,7 @@ export default async function AdminLayout({
               <ShieldCheck size={20} weight="fill" className="text-emerald-400" />
             </span>
             <span className="font-[family-name:var(--font-heading)] text-lg font-semibold tracking-tight">
-              FreightConnect Admin
+              Global Trade Collective Admin
             </span>
           </Link>
           <Link href="/forwarders" className="text-sm font-medium text-white/70 transition-colors hover:text-white">

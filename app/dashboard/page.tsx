@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { getCurrentUser } from "@/lib/auth/guards";
 import { getMyForwarder } from "@/lib/dashboard/queries";
 
-export const metadata = { title: "Dashboard — FreightConnect" };
+export const metadata = { title: "Dashboard — Global Trade Collective" };
 
 const STATUS_LABEL: Record<string, string> = {
   draft: "Draft — not submitted",

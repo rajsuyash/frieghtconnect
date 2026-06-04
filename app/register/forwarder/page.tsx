@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { requireUser } from "@/lib/auth/guards";
 import { OnboardingWizard } from "@/components/forwarders/onboarding-wizard";
 
-export const metadata = { title: "List your company — FreightConnect" };
+export const metadata = { title: "List your company — Global Trade Collective" };
 
 // Per-request data (DB + session) — never prerender at build.
 export const dynamic = "force-dynamic";
@@ -21,7 +21,7 @@ export default async function ForwarderOnboardingPage() {
               <Boat size={20} weight="fill" />
             </span>
             <span className="font-[family-name:var(--font-heading)] text-lg font-semibold tracking-tight text-[var(--color-ink)]">
-              FreightConnect
+              Global Trade Collective
             </span>
           </Link>
           <Link

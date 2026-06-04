@@ -14,7 +14,7 @@ export async function generateMetadata({
 }) {
   const { slug } = await params;
   const f = await getForwarderBySlug(slug);
-  return { title: f ? `Send an inquiry to ${f.companyName}` : "Inquiry — FreightConnect" };
+  return { title: f ? `Send an inquiry to ${f.companyName}` : "Inquiry — Global Trade Collective" };
 }
 
 // Per-request data (DB + session) — never prerender at build.

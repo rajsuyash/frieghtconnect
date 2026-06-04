@@ -7,7 +7,7 @@ import { FilterBar } from "@/components/forwarders/filter-bar";
 import { ForwarderCard } from "@/components/forwarders/forwarder-card";
 
 export const metadata = {
-  title: "Forwarder directory — FreightConnect",
+  title: "Forwarder directory — Global Trade Collective",
   description: "Search verified freight forwarders by country, mode, and service.",
 };
 

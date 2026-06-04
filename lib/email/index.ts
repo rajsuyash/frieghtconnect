@@ -9,7 +9,7 @@ export interface EmailMessage {
 
 async function sendViaResend(msg: EmailMessage): Promise<void> {
   const apiKey = process.env.RESEND_API_KEY;
-  const from = process.env.EMAIL_FROM || "FreightConnect <noreply@freightconnect.example>";
+  const from = process.env.EMAIL_FROM || "Global Trade Collective <noreply@freightconnect.example>";
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {

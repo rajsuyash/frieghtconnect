@@ -9,7 +9,7 @@ import { createSignedDocPath } from "@/lib/admin/signed-url";
 import { modeLabel, serviceLabel } from "@/lib/taxonomy";
 import { countryLabel } from "@/lib/geo";
 
-export const metadata = { title: "Application review — FreightConnect Admin" };
+export const metadata = { title: "Application review — Global Trade Collective Admin" };
 
 function fmtKb(bytes: number): string {
   return `${Math.max(1, Math.round(bytes / 1024))} KB`;

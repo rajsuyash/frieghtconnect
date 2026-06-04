@@ -19,7 +19,7 @@ export default async function DashboardLayout({
               <Boat size={20} weight="fill" />
             </span>
             <span className="font-[family-name:var(--font-heading)] text-lg font-semibold tracking-tight text-[var(--color-ink)]">
-              FreightConnect
+              Global Trade Collective
             </span>
           </Link>
           <nav className="flex items-center gap-5">

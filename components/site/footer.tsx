@@ -1,21 +1,42 @@
+import Link from "next/link";
 import { Boat } from "@phosphor-icons/react/dist/ssr";
 
 const COLUMNS = [
   {
     heading: "For shippers",
-    links: ["Browse directory", "Search by lane", "How it works", "Send an inquiry"],
+    links: [
+      { label: "Browse directory", href: "/forwarders" },
+      { label: "Search by lane", href: "/forwarders" },
+      { label: "How it works", href: "/#how-it-works" },
+      { label: "Send an inquiry", href: "/forwarders" },
+    ],
   },
   {
     heading: "For forwarders",
-    links: ["List your company", "Verification", "Forwarder dashboard", "Pricing"],
+    links: [
+      { label: "List your company", href: "/register?role=forwarder" },
+      { label: "Verification", href: "/#how-it-works" },
+      { label: "Forwarder dashboard", href: "/dashboard" },
+      { label: "Pricing", href: "/register?role=forwarder" },
+    ],
   },
   {
     heading: "Company",
-    links: ["About", "Trust & safety", "Careers", "Contact"],
+    links: [
+      { label: "About", href: "/" },
+      { label: "Trust & safety", href: "/#how-it-works" },
+      { label: "Careers", href: "/" },
+      { label: "Contact", href: "/" },
+    ],
   },
   {
     heading: "Legal",
-    links: ["Privacy", "Terms", "Data requests", "Cookies"],
+    links: [
+      { label: "Privacy", href: "/" },
+      { label: "Terms", href: "/" },
+      { label: "Data requests", href: "/" },
+      { label: "Cookies", href: "/" },
+    ],
   },
 ];
 
@@ -30,7 +51,7 @@ export function Footer() {
                 <Boat size={20} weight="fill" />
               </span>
               <span className="font-[family-name:var(--font-heading)] text-lg font-semibold tracking-tight text-[var(--color-ink)]">
-                FreightConnect
+                Global Trade Collective
               </span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-[var(--color-muted)]">
@@ -46,13 +67,13 @@ export function Footer() {
               </h4>
               <ul className="mt-4 space-y-3">
                 {col.links.map((link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
                       className="text-sm text-[var(--color-muted)] transition-colors hover:text-[var(--color-accent)] cursor-pointer"
                     >
-                      {link}
-                    </a>
+                      {link.label}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -62,7 +83,7 @@ export function Footer() {
 
         <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-[var(--color-line)] pt-8 sm:flex-row">
           <p className="text-sm text-[var(--color-faint)]">
-            © {new Date().getFullYear()} FreightConnect. All rights reserved.
+            © {new Date().getFullYear()} Global Trade Collective. All rights reserved.
           </p>
           <p className="text-sm text-[var(--color-faint)]">
             Built for shippers and forwarders worldwide.

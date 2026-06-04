@@ -114,7 +114,7 @@ export async function approveForwarder(adminId: string, id: string) {
   await audit(adminId, "forwarder.approve", id);
   await sendEmail({
     to: f.owner.email,
-    subject: "Your FreightConnect profile is approved",
+    subject: "Your Global Trade Collective profile is approved",
     text: `Good news — ${f.companyName} passed verification and is now live in the directory with a verified badge.`,
   });
   return { id, status: "approved" as const, verified: true };
@@ -138,7 +138,7 @@ export async function rejectForwarder(adminId: string, id: string, reason: strin
   await audit(adminId, "forwarder.reject", id, { reason: reason.trim() });
   await sendEmail({
     to: f.owner.email,
-    subject: "Your FreightConnect application needs changes",
+    subject: "Your Global Trade Collective application needs changes",
     text: `Your application for ${f.companyName} was not approved.\n\nReason: ${reason.trim()}\n\nYou can update your profile and resubmit.`,
   });
   return { id, status: "rejected" as const };

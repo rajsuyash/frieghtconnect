@@ -3,7 +3,7 @@ import { CheckCircle, WarningCircle } from "@phosphor-icons/react/dist/ssr";
 import { Button } from "@/components/ui/button";
 import { consumeVerificationToken } from "@/lib/auth/tokens";
 
-export const metadata = { title: "Verify email — FreightConnect" };
+export const metadata = { title: "Verify email — Global Trade Collective" };
 
 export default async function VerifyEmailPage({
   searchParams,

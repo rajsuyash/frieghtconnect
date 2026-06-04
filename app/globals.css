@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /*
-  FreightConnect design tokens (Tailwind v4, CSS-first).
+  Global Trade Collective design tokens (Tailwind v4, CSS-first).
   Locked accent: ocean blue. Emerald appears ONLY for the verified semantic state.
   Radius rule: buttons = full pill, cards/surfaces = 1rem (rounded-2xl), inputs = 0.75rem.
 */

@@ -22,7 +22,7 @@ function notificationText(input: InquiryInput, company: string): string {
       ? `${countryLabel(input.originCountry ?? "?")}${input.originPort ? ` (${input.originPort})` : ""} -> ${countryLabel(input.destinationCountry ?? "?")}${input.destinationPort ? ` (${input.destinationPort})` : ""}`
       : "Not specified";
   return [
-    `New inquiry for ${company} via FreightConnect.`,
+    `New inquiry for ${company} via Global Trade Collective.`,
     "",
     `From: ${input.shipperName}${input.shipperCompany ? `, ${input.shipperCompany}` : ""}`,
     `Reply to: ${input.shipperEmail}`,

@@ -1,11 +1,14 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { motion, useScroll, useMotionValueEvent } from "motion/react";
 import { Boat, List, X } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Magnetic } from "@/components/motion/magnetic";
 import { cn } from "@/lib/utils";
+
+const LIST_HREF = "/register?role=forwarder";
 
 const NAV_LINKS = [
   { label: "How it works", href: "#how-it-works" },
@@ -38,7 +41,7 @@ export function Navbar() {
             <Boat size={20} weight="fill" />
           </span>
           <span className="font-[family-name:var(--font-heading)] text-lg font-semibold tracking-tight text-[var(--color-ink)]">
-            FreightConnect
+            Global Trade Collective
           </span>
         </a>
 
@@ -55,15 +58,17 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2">
-          <a
-            href="#"
+          <Link
+            href="/login"
             className="hidden text-sm font-medium text-[var(--color-muted)] transition-colors hover:text-[var(--color-ink)] sm:block cursor-pointer"
           >
             Sign in
-          </a>
+          </Link>
           <div className="hidden sm:block">
             <Magnetic>
-              <Button size="sm">List your company</Button>
+              <Link href={LIST_HREF} className={buttonVariants({ size: "sm" })}>
+                List your company
+              </Link>
             </Magnetic>
           </div>
           <button
@@ -96,7 +101,13 @@ export function Navbar() {
                 {link.label}
               </a>
             ))}
-            <Button className="mt-2 w-full">List your company</Button>
+            <Link
+              href={LIST_HREF}
+              onClick={() => setOpen(false)}
+              className={cn(buttonVariants(), "mt-2 w-full")}
+            >
+              List your company
+            </Link>
           </div>
         </motion.div>
       )}

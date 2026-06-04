@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { listPending } from "@/lib/admin/moderation";
 import { countryLabel } from "@/lib/geo";
 
-export const metadata = { title: "Review queue — FreightConnect Admin" };
+export const metadata = { title: "Review queue — Global Trade Collective Admin" };
 
 // Per-request data (DB + session) — never prerender at build.
 export const dynamic = "force-dynamic";

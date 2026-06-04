@@ -10,7 +10,7 @@ import { getMyInquiries } from "@/lib/dashboard/queries";
 import { modeLabel } from "@/lib/taxonomy";
 import { countryLabel } from "@/lib/geo";
 
-export const metadata = { title: "Inquiries — FreightConnect" };
+export const metadata = { title: "Inquiries — Global Trade Collective" };
 
 function laneLabel(o?: string | null, op?: string | null, d?: string | null, dp?: string | null) {
   if (!o && !d) return null;

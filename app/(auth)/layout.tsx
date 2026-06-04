@@ -13,7 +13,7 @@ export default function AuthLayout({
           <Boat size={22} weight="fill" />
         </span>
         <span className="font-[family-name:var(--font-heading)] text-xl font-semibold tracking-tight text-[var(--color-ink)]">
-          FreightConnect
+          Global Trade Collective
         </span>
       </Link>
       <div className="w-full max-w-md rounded-3xl border border-[var(--color-line)] bg-white p-8 shadow-[0_30px_80px_-40px_rgba(15,23,42,0.3)]">
