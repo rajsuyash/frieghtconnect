@@ -1,3 +1,4 @@
+import Link from "next/link";
 import {
   ArrowRight,
   ShieldCheck,
@@ -9,7 +10,7 @@ import type { FeaturedForwarder } from "@/lib/data/forwarders";
 
 export function ForwarderCard({ f }: { f: FeaturedForwarder }) {
   return (
-    <a
+    <Link
       href={`/forwarders/${f.slug}`}
       className="group relative flex flex-col rounded-2xl border border-[var(--color-line)] bg-white p-6 transition-all duration-300 ease-[var(--ease-out-expo)] hover:-translate-y-1 hover:border-[var(--color-accent)]/40 hover:shadow-[0_24px_50px_-24px_rgba(15,23,42,0.25)] cursor-pointer"
     >
@@ -55,6 +56,6 @@ export function ForwarderCard({ f }: { f: FeaturedForwarder }) {
           />
         </span>
       </div>
-    </a>
+    </Link>
   );
 }

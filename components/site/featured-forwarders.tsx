@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowRight } from "@phosphor-icons/react/dist/ssr";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/reveal";
 import { ForwarderCard } from "@/components/site/forwarder-card";
@@ -16,13 +17,13 @@ export function FeaturedForwarders() {
               A sample of agents that cleared review this month.
             </p>
           </div>
-          <a
+          <Link
             href="/forwarders"
             className="flex items-center gap-1.5 rounded-full border border-[var(--color-line)] px-5 py-2.5 text-sm font-medium text-[var(--color-navy)] transition-colors hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] cursor-pointer"
           >
             Browse all forwarders
             <ArrowRight size={15} weight="bold" />
-          </a>
+          </Link>
         </Reveal>
 
         <Stagger className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
