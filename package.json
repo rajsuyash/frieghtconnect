@@ -22,6 +22,12 @@
   "prisma": {
     "seed": "tsx prisma/seed.ts"
   },
+  "pnpm": {
+    "supportedArchitectures": {
+      "os": ["darwin", "linux"],
+      "cpu": ["x64", "arm64"]
+    }
+  },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
     "@prisma/client": "^6.19.3",
