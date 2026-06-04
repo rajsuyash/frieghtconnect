@@ -36,6 +36,33 @@ export function OnboardingWizard({ isVerified }: { isVerified: boolean }) {
   const [error, setError] = React.useState<string | null>(null);
   const [submitted, setSubmitted] = React.useState(false);
 
+  // Prefill from an existing profile so editing doesn't wipe prior data.
+  React.useEffect(() => {
+    let active = true;
+    fetch("/api/forwarders/draft")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (!active || !d) return;
+        setCompanyName(d.companyName ?? "");
+        setPrimaryCountry(d.primaryCountry ?? "");
+        setYearEstablished(d.yearEstablished ? String(d.yearEstablished) : "");
+        setWebsiteUrl(d.websiteUrl ?? "");
+        setAbout(d.about ?? "");
+        setModes(d.modes ?? []);
+        setServices(d.services ?? []);
+        type Coverage = { country: string; city: string | null; isHeadquarters: boolean };
+        const countries: Coverage[] = d.countries ?? [];
+        const hq = countries.find((c) => c.isHeadquarters);
+        if (hq?.city) setCity(hq.city);
+        setExtraCountries(countries.filter((c) => !c.isHeadquarters).map((c) => c.country));
+        setDraftSaved(true);
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
+
   function buildPayload() {
     const coverage = [
       { country: primaryCountry, city: city || undefined, isHeadquarters: true, ports: [] },
