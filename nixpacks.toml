@@ -1,0 +1,6 @@
+# Override Nixpacks' default `pnpm i --frozen-lockfile`. A fresh install lets
+# pnpm fetch the correct platform-native binaries (@tailwindcss/oxide,
+# lightningcss) for Railway's Linux builder, which a macOS-generated frozen
+# lockfile cannot guarantee. postinstall still runs `prisma generate`.
+[phases.install]
+cmds = ["pnpm install --no-frozen-lockfile"]
