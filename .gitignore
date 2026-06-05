@@ -42,3 +42,6 @@ next-env.d.ts
 
 # local KYC uploads (dev)
 .uploads/
+
+# Client pricing — keep out of the public repo
+docs/PROPOSAL.md

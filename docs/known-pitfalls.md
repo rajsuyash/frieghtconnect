@@ -132,7 +132,43 @@ Surfaces in this project: Web app only (Next.js App Router + Prisma/Postgres).
 ### User enumeration on auth errors
 - **Symptom:** Different message/timing reveals whether an email is registered.
 - **Cause:** Distinct "no such user" vs "wrong password" responses.
-- **Fix:** Identical generic error + constant-time comparison for unknown-email vs wrong-password (PRD F6 AC5).
+- **Fix:** Identical generic error + constant-time comparison for unknown-email vs wrong-password (PRD F6 AC5). _(Now handled by Clerk — credentials are no longer ours.)_
+
+---
+
+## Clerk / auth pitfalls
+
+> Auth is Clerk (migrated from NextAuth 2026-06-04). See `docs/auth.md`.
+
+### `@clerk/nextjs` 7.4.3 — `<Show>` replaces `SignedIn`/`SignedOut`
+- **Symptom:** Type error: `'@clerk/nextjs' has no exported member 'SignedIn'`.
+- **Cause:** This pinned version uses a newer component API.
+- **Fix:** Use `<Show when="signed-in">…</Show>` / `<Show when="signed-out">…</Show>` (import `Show` from `@clerk/nextjs`). `when` also accepts `{ role }` / `{ permission }` / `(has) => boolean`.
+- **Date logged:** 2026-06-04
+
+### `UserButton` has no `afterSignOutUrl` prop (this version)
+- **Symptom:** Type error: `Property 'afterSignOutUrl' does not exist`.
+- **Cause:** Prop removed in this Clerk version.
+- **Fix:** Drop the prop; configure sign-out redirect via `ClerkProvider` / defaults. Sign-out in custom buttons: `useClerk().signOut({ redirectUrl: "/" })`.
+- **Date logged:** 2026-06-04
+
+### `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` missing in the Docker build
+- **Symptom:** Clerk fails to initialize in the deployed bundle even though the runtime env var is set on Railway.
+- **Cause:** The publishable key is **inlined at `next build`**, not read at runtime. A Dockerfile build doesn't see runtime env unless it's a build ARG.
+- **Fix:** In `Dockerfile`, add `ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` + `ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` **before** `pnpm build`. Railway passes the matching service variable as a build arg automatically. (Same class of bug as the Tailwind-oxide native-binding issue.)
+- **Date logged:** 2026-06-04
+
+### Protected route returns 404 to `curl` but works in the browser
+- **Symptom:** `curl /dashboard` → `404`, looks like the route is broken.
+- **Cause:** Clerk's `auth.protect()` only issues a redirect for requests it recognizes as browser navigations (`Accept: text/html`, `Sec-Fetch-Dest: document`). A bare curl gets a 404 instead of the sign-in redirect — this is expected, not a bug.
+- **Fix:** Smoke-test protected routes with navigation headers: `curl -H "Accept: text/html" -H "Sec-Fetch-Dest: document" -H "Sec-Fetch-Mode: navigate" …` → you'll see the `307` to the Clerk handshake / sign-in.
+- **Date logged:** 2026-06-04
+
+### `create:admin` against prod Postgres from a laptop
+- **Symptom:** Connection hangs/fails when running `pnpm create:admin` with the app's `DATABASE_URL`.
+- **Cause:** Railway's internal `DATABASE_URL` (`*.railway.internal`) is only reachable from inside the Railway network.
+- **Fix:** Use the Postgres service's `DATABASE_PUBLIC_URL` (TCP proxy) for external scripts: `DATABASE_URL="$PGURL" ADMIN_EMAIL=… pnpm create:admin`. See `docs/auth.md` §5.
+- **Date logged:** 2026-06-04
 
 ---
 

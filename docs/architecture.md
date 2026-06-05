@@ -39,7 +39,7 @@ There is **one surface: the web app.** There is no standalone backend service an
 | UI | Tailwind CSS + shadcn/ui | latest | Accessible, consistent primitives |
 | Database | PostgreSQL | 16.x | Relational data + JSONB/array flexibility for modes/services; strong indexing for filtered search |
 | ORM | Prisma | 5.x | Typed schema mapping §5 entities; migrations |
-| Auth | Auth.js (NextAuth) credentials | 5.x | Session cookies, `role` field, email verification |
+| Auth | **Clerk** (`@clerk/nextjs`) | 7.x | Google + email sign-in, email verification, sessions. DB `User` (linked by `clerkId`) owns `role` + ownership. Migrated from NextAuth 2026-06-04 — see @docs/auth.md |
 | File storage | S3-compatible (R2 / S3) | — | Private KYC docs + signed URLs |
 | Email | Resend / Postmark / SES (behind an interface) | — | Verification + notifications |
 | Hosting | Railway (app + Postgres + bucket + cron worker) | — | One project, one bill (~$5/mo); persistent server suits the email-retry queue + scheduled jobs |
@@ -77,7 +77,7 @@ Logical modules inside the single app (not separate deployables):
 
 | Module | Responsibility | Depends on |
 |--------|----------------|------------|
-| `lib/auth` | Session, roles, email verification, password hashing | Prisma, email |
+| `lib/auth` | Clerk→DB user sync (`sync.ts`), role guards (`guards.ts`), forwarder promotion | Prisma, Clerk |
 | `lib/forwarders` | Profile CRUD, slug generation, status transitions, public projection | Prisma, storage |
 | `lib/inquiries` | Create + persist inquiry, queue notification, idempotency, rate limit | Prisma, email |
 | `lib/admin` | Review queue, approve/reject/suspend, signed-URL issuance, audit log | Prisma, storage |

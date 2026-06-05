@@ -14,7 +14,8 @@ A two-sided web marketplace where cargo shippers search for and contact verified
 **Deployment:** Railway (one project) — Next app service + Railway Postgres + Railway object-storage bucket (private, for KYC docs) + a cron/worker service for the inquiry email-retry queue. Storage + email sit behind interfaces (`lib/storage`, `lib/email`) with standard env vars, so the host stays swappable.
 **Dev URL:** http://localhost:3000
 
-> Greenfield repo. Code does not exist yet — `docs/architecture.md` describes the **target** architecture. Auth = Auth.js (NextAuth) credentials provider with a `role` field.
+> **Status: built & live** at https://freightconnect-app-production.up.railway.app (P0 features F1–F7). `docs/architecture.md` describes the broader architecture.
+> **Auth = Clerk** (Google + email sign-in), migrated from NextAuth on 2026-06-04. The Prisma `User` row stays the source of truth for `role` (shipper/forwarder/admin) + ownership, linked to Clerk by `clerkId`. See **@docs/auth.md**.
 
 ## Folder layout
 
@@ -22,10 +23,11 @@ A two-sided web marketplace where cargo shippers search for and contact verified
 .
 ├── app/                  # Next.js App Router — pages + Route Handlers (API)
 │   ├── (public)/         # directory, profile, inquiry — SSR, SEO-critical
-│   ├── (auth)/           # register, login, verify-email
+│   ├── sign-in/ sign-up/ # Clerk auth pages (catch-all routes)
+│   ├── register/forwarder/ # forwarder onboarding wizard (auth-gated)
 │   ├── dashboard/        # forwarder-only area (profile edit, inquiries inbox)
 │   ├── admin/            # admin-only console (review, moderation, taxonomy)
-│   └── api/              # Route Handlers: forwarders, inquiries, admin, auth
+│   └── api/              # Route Handlers: forwarders, inquiries, admin
 ├── lib/                  # services, repositories, auth, validation (Zod), email, storage
 ├── prisma/               # schema.prisma + migrations (never edit applied migrations)
 ├── components/           # shadcn/ui + app components
@@ -86,7 +88,7 @@ These are hard rules. Violating them blocks merge.
 2. **KYC documents are private.** Never expose a KYC document on any public endpoint or public payload. Store in a private bucket; serve only via short-lived (≤5 min) signed URLs from admin-only code. `verified=true` implies `status=approved`.
 3. **Identity from the session, never the client.** Derive `ownerUserId` (and any tenant/owner scoping) from the authenticated session. Never trust a client-supplied `ownerId`/`userId` in a body or query.
 4. **Admin role enforced server-side.** Every `/admin/*` page and `/api/admin/*` handler checks the admin role on the server. Hiding UI is not access control.
-5. **Auth hygiene.** Hash passwords (argon2 or bcrypt) — never plaintext. Session cookies are `httpOnly`, `secure`, `sameSite=lax`. Auth errors must not enable user enumeration (identical message + timing for unknown-email vs wrong-password).
+5. **Auth hygiene (Clerk).** Credentials, sessions, and email verification are owned by **Clerk** — we do not store or hash passwords. Derive identity via `lib/auth/guards.ts` (`getCurrentUser`/`requireUser`/`requireRole`), which sync the Clerk session to the DB `User`. Never trust client-supplied identity; `role` comes from the DB row. See @docs/auth.md.
 6. **Persist before side effects.** Persist an `Inquiry` before attempting any email send; a provider failure must never lose a lead (queue + retry). Use an idempotency key to prevent duplicate inquiries on retry/double-click.
 7. **Filter state lives in the URL.** Directory filters are query-string driven (shareable + back-button safe), not component-only state.
 8. **Slugs are server-generated, unique, immutable once approved.** Resolve collisions with `-2`, `-3` suffixes.
