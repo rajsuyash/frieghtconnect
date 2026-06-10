@@ -111,6 +111,17 @@ export async function queryForwarders(
   };
 }
 
+/** Approved profile slugs for the sitemap — public surface only. */
+export async function listApprovedForwarderSlugs(): Promise<
+  Array<{ slug: string; updatedAt: Date }>
+> {
+  return prisma.forwarderProfile.findMany({
+    where: { status: "approved" },
+    select: { slug: true, updatedAt: true },
+    orderBy: { createdAt: "desc" },
+  });
+}
+
 /** Public profile detail — only approved profiles resolve; KYC is never selected. */
 export async function getForwarderBySlug(
   slug: string,

@@ -95,7 +95,12 @@ Logical modules inside the single app (not separate deployables):
 | Object storage (S3/R2) | Private KYC doc storage + signed URLs | IAM/key | Fail upload 5xx; no orphaned DB record without object |
 | Captcha (Turnstile/hCaptcha) | Inquiry/registration spam control | site+secret key | Fail closed on inquiry submit |
 
-Providers are TODO at the interface level — `lib/email` and `lib/storage` abstract them.
+`lib/email` and `lib/storage` abstract the providers:
+
+- **Email** — Resend via `RESEND_API_KEY` + `EMAIL_FROM`; without the key, dev mode logs the message to the server console.
+- **Storage** — any S3-compatible bucket via `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`; without them, dev mode writes to the gitignored `.uploads/` dir. **Production must set these** — container disk is ephemeral on Railway.
+- **Inquiry retry** — queued inquiries are re-sent by `pnpm retry:inquiries` (Railway cron service) or `POST /api/cron/retry-inquiries` with `Authorization: Bearer $CRON_SECRET`. After 24h of failed attempts an inquiry is marked `failed` (never deleted). Schedule every 5–15 min.
+- `APP_URL` drives absolute URLs in emails, `robots.txt`, and `sitemap.xml`.
 
 ## 6. Key decisions (ADRs)
 

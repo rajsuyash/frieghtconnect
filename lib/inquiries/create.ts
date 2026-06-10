@@ -1,7 +1,9 @@
 import { prisma } from "@/lib/db";
 import { sendEmail } from "@/lib/email";
-import { modeLabel } from "@/lib/taxonomy";
-import { countryLabel } from "@/lib/geo";
+import {
+  inquiryNotificationSubject,
+  inquiryNotificationText,
+} from "@/lib/inquiries/notification";
 import type { InquiryInput } from "@/lib/validation/inquiry";
 
 export class ForwarderNotAvailableError extends Error {
@@ -14,25 +16,6 @@ export class ForwarderNotAvailableError extends Error {
 export interface InquiryResult {
   id: string;
   status: string;
-}
-
-function notificationText(input: InquiryInput, company: string): string {
-  const lane =
-    input.originCountry || input.destinationCountry
-      ? `${countryLabel(input.originCountry ?? "?")}${input.originPort ? ` (${input.originPort})` : ""} -> ${countryLabel(input.destinationCountry ?? "?")}${input.destinationPort ? ` (${input.destinationPort})` : ""}`
-      : "Not specified";
-  return [
-    `New inquiry for ${company} via Global Trade Collective.`,
-    "",
-    `From: ${input.shipperName}${input.shipperCompany ? `, ${input.shipperCompany}` : ""}`,
-    `Reply to: ${input.shipperEmail}`,
-    `Lane: ${lane}`,
-    `Mode: ${input.mode ? modeLabel(input.mode) : "Any"}`,
-    `Cargo: ${input.cargoType ?? "Not specified"}`,
-    "",
-    "Message:",
-    input.message,
-  ].join("\n");
 }
 
 /**
@@ -80,8 +63,8 @@ export async function createInquiry(input: InquiryInput): Promise<InquiryResult>
   try {
     await sendEmail({
       to: forwarder.owner.email,
-      subject: `New shipping inquiry — ${forwarder.companyName}`,
-      text: notificationText(input, forwarder.companyName),
+      subject: inquiryNotificationSubject(forwarder.companyName),
+      text: inquiryNotificationText(input, forwarder.companyName),
     });
     await prisma.inquiry.update({
       where: { id: inquiry.id },

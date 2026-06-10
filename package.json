@@ -18,7 +18,8 @@
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
     "db:seed": "tsx prisma/seed.ts",
-    "create:admin": "tsx prisma/create-admin.ts"
+    "create:admin": "tsx prisma/create-admin.ts",
+    "retry:inquiries": "tsx scripts/retry-inquiries.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -40,6 +41,7 @@
     }
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1066.0",
     "@clerk/nextjs": "^7.4.3",
     "@phosphor-icons/react": "^2.1.10",
     "@prisma/client": "^6.19.3",
