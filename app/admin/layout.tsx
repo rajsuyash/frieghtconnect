@@ -22,9 +22,17 @@ export default async function AdminLayout({
               Global Trade Collective Admin
             </span>
           </Link>
-          <Link href="/forwarders" className="text-sm font-medium text-white/70 transition-colors hover:text-white">
-            View directory
-          </Link>
+          <nav className="flex items-center gap-5">
+            <Link href="/admin/review" className="text-sm font-medium text-white/70 transition-colors hover:text-white">
+              Applications
+            </Link>
+            <Link href="/admin/reviews" className="text-sm font-medium text-white/70 transition-colors hover:text-white">
+              Reviews
+            </Link>
+            <Link href="/forwarders" className="text-sm font-medium text-white/70 transition-colors hover:text-white">
+              View directory
+            </Link>
+          </nav>
         </div>
       </header>
       {children}

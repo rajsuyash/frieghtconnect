@@ -12,6 +12,7 @@ import {
 import { Monogram } from "@/components/brand/monogram";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ReviewsSection } from "@/components/forwarders/reviews-section";
 import { getForwarderBySlug } from "@/lib/forwarders/repository";
 import { modeLabel, serviceLabel } from "@/lib/taxonomy";
 import { countryLabel } from "@/lib/geo";
@@ -185,6 +186,8 @@ export default async function ProfilePage({
           )}
         </aside>
       </div>
+
+      <ReviewsSection forwarderId={f.id} slug={f.slug} company={f.companyName} />
 
       {/* inquiry entry point — form wired in the inquiry phase */}
       <section

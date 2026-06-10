@@ -39,6 +39,7 @@ export function InquiryForm({ slug, company }: { slug: string; company: string }
   const [error, setError] = React.useState<string | null>(null);
   const [loading, setLoading] = React.useState(false);
   const [sent, setSent] = React.useState(false);
+  const [inquiryId, setInquiryId] = React.useState<string | null>(null);
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setForm((f) => ({ ...f, [k]: e.target.value }));
@@ -58,6 +59,8 @@ export function InquiryForm({ slug, company }: { slug: string; company: string }
         }),
       });
       if (res.status === 201) {
+        const data = await res.json().catch(() => null);
+        if (data?.id) setInquiryId(data.id);
         setSent(true);
       } else if (res.status === 429) {
         setError("Too many requests. Please try again shortly.");
@@ -85,9 +88,21 @@ export function InquiryForm({ slug, company }: { slug: string; company: string }
           We forwarded your request to {company}. They reply directly to{" "}
           <strong>{form.shipperEmail}</strong>.
         </p>
-        <Link href={`/forwarders/${slug}`} className="mt-6 inline-block">
-          <Button variant="secondary">Back to profile</Button>
-        </Link>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <Link href={`/forwarders/${slug}`}>
+            <Button variant="secondary">Back to profile</Button>
+          </Link>
+          {inquiryId && (
+            <Link href={`/forwarders/${slug}/review?inquiry=${inquiryId}`}>
+              <Button variant="secondary">Rate your experience</Button>
+            </Link>
+          )}
+        </div>
+        {inquiryId && (
+          <p className="mt-3 text-xs text-[var(--color-faint)]">
+            Keep this reference to review later: {inquiryId}
+          </p>
+        )}
       </div>
     );
   }

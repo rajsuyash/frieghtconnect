@@ -14,7 +14,7 @@ A two-sided web marketplace where cargo shippers search for and contact verified
 **Deployment:** Railway (one project) — Next app service + Railway Postgres + Railway object-storage bucket (private, for KYC docs) + a cron/worker service for the inquiry email-retry queue. Storage + email sit behind interfaces (`lib/storage`, `lib/email`) with standard env vars, so the host stays swappable.
 **Dev URL:** http://localhost:3000
 
-> **Status: built & live** at https://freightconnect-app-production.up.railway.app (P0 features F1–F7). `docs/architecture.md` describes the broader architecture.
+> **Status: built & live** at https://freightconnect-app-production.up.railway.app (all PRD features F1–F9, incl. lane search and moderated shipper reviews). `docs/architecture.md` describes the broader architecture.
 > **Auth = Clerk** (Google + email sign-in), migrated from NextAuth on 2026-06-04. The Prisma `User` row stays the source of truth for `role` (shipper/forwarder/admin) + ownership, linked to Clerk by `clerkId`. See **@docs/auth.md**.
 
 ## Folder layout

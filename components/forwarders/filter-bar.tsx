@@ -48,7 +48,14 @@ function Select({
 export function FilterBar({
   initial,
 }: {
-  initial: { q?: string; country?: string; mode?: string; service?: string };
+  initial: {
+    q?: string;
+    country?: string;
+    mode?: string;
+    service?: string;
+    originCountry?: string;
+    destinationCountry?: string;
+  };
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -82,6 +89,8 @@ export function FilterBar({
     !!searchParams.get("country") ||
     !!searchParams.get("mode") ||
     !!searchParams.get("service") ||
+    !!searchParams.get("originCountry") ||
+    !!searchParams.get("destinationCountry") ||
     !!searchParams.get("q");
 
   return (
@@ -100,6 +109,8 @@ export function FilterBar({
         <Select label="Country" name="country" value={searchParams.get("country") ?? ""} options={COUNTRIES} onChange={onSelect} />
         <Select label="Mode" name="mode" value={searchParams.get("mode") ?? ""} options={MODES.map((m) => ({ code: m.code, label: m.label }))} onChange={onSelect} />
         <Select label="Service" name="service" value={searchParams.get("service") ?? ""} options={SERVICES.map((s) => ({ code: s.code, label: s.label }))} onChange={onSelect} />
+        <Select label="Origin" name="originCountry" value={searchParams.get("originCountry") ?? ""} options={COUNTRIES} onChange={onSelect} />
+        <Select label="Destination" name="destinationCountry" value={searchParams.get("destinationCountry") ?? ""} options={COUNTRIES} onChange={onSelect} />
       </div>
       {hasFilters && (
         <button

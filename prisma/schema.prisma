@@ -38,6 +38,12 @@ enum KycType {
   other
 }
 
+enum ReviewStatus {
+  pending
+  approved
+  rejected
+}
+
 model User {
   id            String           @id @default(cuid())
   clerkId       String?          @unique // Clerk user id; null for seed/admin rows until first sign-in
@@ -83,6 +89,7 @@ model ForwarderProfile {
   lanes           TradeLane[]
   documents       KycDocument[]
   inquiries       Inquiry[]
+  reviews         Review[]
 
   @@index([status])
   @@index([primaryCountry])
@@ -148,8 +155,28 @@ model Inquiry {
   idempotencyKey     String?       @unique
   createdAt          DateTime      @default(now())
 
+  review             Review?
+
   @@index([forwarderId])
   @@index([shipperEmail, createdAt])
+}
+
+// F9 — shipper rating after an inquiry. One review per inquiry; only
+// "approved" reviews are public. Reviewer identity is verified by matching
+// the inquiry's shipperEmail (shippers are anonymous in v1).
+model Review {
+  id          String           @id @default(cuid())
+  forwarderId String
+  forwarder   ForwarderProfile @relation(fields: [forwarderId], references: [id], onDelete: Cascade)
+  inquiryId   String           @unique
+  inquiry     Inquiry          @relation(fields: [inquiryId], references: [id], onDelete: Cascade)
+
+  rating      Int // 1–5, validated at the boundary
+  comment     String?
+  status      ReviewStatus     @default(pending)
+  createdAt   DateTime         @default(now())
+
+  @@index([forwarderId, status])
 }
 
 model AuditLog {
